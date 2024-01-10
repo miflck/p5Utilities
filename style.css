@@ -10,9 +10,8 @@ canvas {
 
 .container-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px; /* Top margin for the container */
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 #sketch-container-1,
@@ -21,5 +20,27 @@ canvas {
 }
 
 .sketch-container {
-  margin: 10px; /* Add some margin between the canvas containers */
+  margin: 5px;
+}
+.flex-row {
+  display: flex;
+}
+
+.small-items-container {
+  display: flex;
+  flex-direction: column; /* Stack small items vertically */
+  flex: 1; /* Take up remaining space in the row */
+}
+
+.large-item {
+  width: 600px;
+  height: 600px;
+  background-color: lightblue;
+}
+
+.small-item {
+  width: 600px;
+  height: 190px;
+  overflow: hidden;
+  background-color: lightgreen;
 }

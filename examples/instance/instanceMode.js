@@ -121,55 +121,8 @@ const rectsize = (p5) => {
   };
 };
 
-new p5(rectsize, "sketch-container-2");
-
-const rectsize2 = (p5) => {
-  // Instance of Easing
-  const easing = new Easing({
-    values: { width: 20 },
-    endValues: { width: 200 },
-    duration: durationInMs,
-    easingFunctionName: "easeInQuintic",
-  });
-
-  p5.setup = () => {
-    p5.createCanvas(600, 200);
-  };
-
-  p5.draw = () => {
-    p5.background(220);
-
-    // Update the easing in each frame
-    easing.update();
-
-    // Get the current width from the easing
-    const currentWidth = easing.getCurrentValues().width;
-
-    // Draw the rectangle with the current width
-    p5.fill(0, 150, 255);
-    p5.rect(100, 50, currentWidth, 100);
-
-    // Check if the animation is still running
-    if (!easing.isRunning) {
-      easing.stop(); // Stop looping once the animation is complete
-    }
-  };
-
-  p5.mousePressed = () => {
-    // Start the animation when the mouse is pressed
-
-    let startSize = easing.getCurrentValues().width === 20 ? 20 : 400;
-    let endSize = easing.getCurrentValues().width === 400 ? 20 : 400;
-
-    easing.setStartValues({ width: startSize });
-    easing.setEndValues({ width: endSize });
-
-    easing.start();
-  };
-};
-
 // Create an instance of the first sketch
-new p5(rectsize2, "sketch-container-3");
+new p5(rectsize, "sketch-container-2");
 
 const circleGrow = (p5) => {
   // Instance of Easing
@@ -216,4 +169,4 @@ const circleGrow = (p5) => {
   };
 };
 // Create an instance of the first sketch
-new p5(circleGrow, "sketch-container-5");
+new p5(circleGrow, "sketch-container-3");

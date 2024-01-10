@@ -12,15 +12,39 @@
     <script src="libraries/p5.sound.min.js"></script>
     <script src="utils/easing.js"></script>
     <script src="utils/timer.js"></script>
+    <script src="instanceMode.js"></script>
   </head>
 
   <body>
     <h1>p5.js Examples</h1>
-
     <ul>
-      <li><a href="size.html">Size Animation</a></li>
-      <li><a href="swing.html">Swing Animation</a></li>
-      <li><a href="instancemode.html">P5 instance mode</a></li>
+      <li><a href="examples/size/size.html">Size Animation</a></li>
+      <li><a href="examples/swing/swing.html">Swing Animation</a></li>
+      <li>
+        <a href="examples/instance/instancemode.html">P5 instance mode</a>
+      </li>
     </ul>
+    <div class="container-wrapper">
+      <div class="flex-row">
+        <div id="sketch-container-1" class="sketch-container large-item"></div>
+        <div class="small-items-container">
+          <div
+            id="sketch-container-2"
+            class="sketch-container small-item"
+          ></div>
+          <div
+            id="sketch-container-3"
+            class="sketch-container small-item"
+          ></div>
+          <div
+            id="sketch-container-4"
+            class="sketch-container small-item"
+          ></div>
+        </div>
+      </div>
+      <div class="flex-row">
+        <div id="sketch-container-5" class="sketch-container large-item"></div>
+      </div>
+    </div>
   </body>
 </html>

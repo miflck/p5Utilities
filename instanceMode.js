@@ -1,6 +1,7 @@
+let durationInMs = 1000;
+
 // Instance mode function
 const swingsketch = function (p5) {
-  let t; // Timer instance
   let easings = []; // Array to store Easing instances
   const easingFunctionNames = Easing.getEasingFunctionNames(); // Array of easing function names
   const numberOfEasingFunctions = easingFunctionNames.length; // Number of easing functions
@@ -8,10 +9,6 @@ const swingsketch = function (p5) {
   p5.setup = function () {
     p5.createCanvas(600, 600);
     p5.background(0);
-
-    // Initialize and start the timer
-    t = new Timer(callback, 2000);
-    t.start();
 
     console.log(easingFunctionNames);
 
@@ -31,10 +28,9 @@ const swingsketch = function (p5) {
       let easing = new Easing({
         values: { x: 150, y: initialY },
         endValues: { x: p5.width - 50, y: initialY },
-        duration: 1000,
+        duration: durationInMs,
         easingFunctionName: easingFunctionName,
       });
-      easing.start();
       easings.push(easing); // Add Easing to the array
     }
   };
@@ -60,47 +56,11 @@ const swingsketch = function (p5) {
 
   p5.keyPressed = function () {
     // Toggle the timer on "s" key press
-    if (p5.key == "s") {
-      console.log("timer", t.isRunning);
-      if (t.isRunning) {
-        t.stop();
-      } else {
-        t.start();
-      }
-    }
-
-    // Trigger a single Easing's movement on "t" key press
-    if (p5.key == "t") {
-      let newX = p5.random(p5.width);
-      let newY = p5.random(p5.height);
-      let newDuration = 500;
-      easings[0].duration = newDuration;
-      easings[0].setTargetPosition(newX, newY);
-      easings[0].start();
-    }
-
-    // Reset and animate all Easings on "r" key press
-    if (p5.key == "r") {
-      easings.forEach((easing, index) => {
-        let initialY = p5.map(index, 0, easings.length - 1, 50, p5.height - 50);
-        let startX = easing.getCurrentValues().x;
-        let targetX = 150;
-
-        // Set start and target positions, duration, and start the animation
-        easing.setStartValues({ x: startX, y: initialY });
-        easing.setEndValues({ x: targetX, y: initialY });
-        easing.duration = p5.max(t.remainingTime - 150, 0);
-        easing.start();
-      });
-    }
   };
 
-  // Callback function for the timer tick
-  function callback() {
-    console.log("tick");
+  p5.mousePressed = () => {
     easings.forEach((easing, index) => {
       let initialY = p5.map(index, 0, easings.length - 1, 50, p5.height - 50);
-
       let startX =
         easing.getCurrentValues().x === p5.width - 50 ? p5.width - 50 : 150;
       let targetX = easing.getCurrentValues().x === 150 ? p5.width - 50 : 150;
@@ -108,30 +68,29 @@ const swingsketch = function (p5) {
       // Set start and target positions, duration, and start the animation
       easing.setStartValues({ x: startX, y: initialY });
       easing.setEndValues({ x: targetX, y: initialY });
-      easing.duration = 1500;
       easing.start();
     });
-  }
+  };
 };
 
 // Create an instance of the first sketch
 new p5(swingsketch, "sketch-container-1");
 
-const sizesketch = (p) => {
+const rectsize = (p5) => {
   // Instance of Easing
   const easing = new Easing({
     values: { width: 20 },
     endValues: { width: 200 },
-    duration: 500,
-    easingFunctionName: "easeOutBounce",
+    duration: durationInMs,
+    easingFunctionName: "easeOutQuintic",
   });
 
-  p.setup = () => {
-    p.createCanvas(400, 200);
+  p5.setup = () => {
+    p5.createCanvas(600, 200);
   };
 
-  p.draw = () => {
-    p.background(220);
+  p5.draw = () => {
+    p5.background(220);
 
     // Update the easing in each frame
     easing.update();
@@ -140,8 +99,8 @@ const sizesketch = (p) => {
     const currentWidth = easing.getCurrentValues().width;
 
     // Draw the rectangle with the current width
-    p.fill(0, 150, 255);
-    p.rect(100, 50, currentWidth, 100);
+    p5.fill(0, 150, 255);
+    p5.rect(100, 50, currentWidth, 100);
 
     // Check if the animation is still running
     if (!easing.isRunning) {
@@ -149,11 +108,11 @@ const sizesketch = (p) => {
     }
   };
 
-  p.mousePressed = () => {
+  p5.mousePressed = () => {
     // Start the animation when the mouse is pressed
 
-    let startSize = easing.getCurrentValues().width === 20 ? 20 : 200;
-    let endSize = easing.getCurrentValues().width === 200 ? 20 : 200;
+    let startSize = easing.getCurrentValues().width === 20 ? 20 : 400;
+    let endSize = easing.getCurrentValues().width === 400 ? 20 : 400;
 
     easing.setStartValues({ width: startSize });
     easing.setEndValues({ width: endSize });
@@ -163,4 +122,51 @@ const sizesketch = (p) => {
 };
 
 // Create an instance of the first sketch
-new p5(sizesketch, "sketch-container-2");
+new p5(rectsize, "sketch-container-2");
+
+const circleGrow = (p5) => {
+  // Instance of Easing
+  const easing = new Easing({
+    values: { width: 20 },
+    endValues: { width: 500 },
+    duration: durationInMs,
+    easingFunctionName: "easeOutBounce",
+  });
+
+  p5.setup = () => {
+    p5.createCanvas(600, 600);
+  };
+
+  p5.draw = () => {
+    p5.background(220);
+
+    // Update the easing in each frame
+    easing.update();
+
+    // Get the current width from the easing
+    const currentWidth = easing.getCurrentValues().width;
+
+    // Draw the rectangle with the current width
+    p5.fill(0, 150, 255);
+    p5.ellipse(p5.width / 2, p5.height / 2, currentWidth);
+
+    // Check if the animation is still running
+    if (!easing.isRunning) {
+      easing.stop(); // Stop looping once the animation is complete
+    }
+  };
+
+  p5.mousePressed = () => {
+    // Start the animation when the mouse is pressed
+
+    let startSize = easing.getCurrentValues().width === 20 ? 20 : 400;
+    let endSize = easing.getCurrentValues().width === 400 ? 20 : 400;
+
+    easing.setStartValues({ width: startSize });
+    easing.setEndValues({ width: endSize });
+
+    easing.start();
+  };
+};
+// Create an instance of the first sketch
+new p5(circleGrow, "sketch-container-3");

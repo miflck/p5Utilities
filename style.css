@@ -16,7 +16,10 @@ canvas {
 }
 
 #sketch-container-1,
-#sketch-container-2 {
-  border: solid thin green;
+#sketch-container-2,
+#sketch-container-3 {
+}
+
+.sketch-container {
   margin: 10px; /* Add some margin between the canvas containers */
 }

@@ -3,14 +3,14 @@
 How to use it
 
 // Example 1D animation with default values
-const animator1D = new Animator({
+const easing1D = new Easing({
   values: [50],
   duration: 1000,
   easingFunctionName: "easeInOutSine",
 });
 
 // Example 2D animation with specified values and targetValues
-const animator2D = new Animator({
+const easing2D = new Easing({
   values: [50, 100],
   targetValues: [200, 300],
   duration: 1500,
@@ -18,7 +18,7 @@ const animator2D = new Animator({
 });
 
 // Example 3D animation
-const animator3D = new Animator({
+const easing3D = new Easing({
   values: [50, 100, 150],
   targetValues: [200, 300, 250],
   duration: 2000,
@@ -33,13 +33,13 @@ const config4D = {
   easingFunctionName: 'easeInOutQuartic',
 };
 
-// Initialize the Animator with the config object
-const animator4D = new Animator(config4D);
+// Initialize the Easing with the config object
+const easing4D = new Easing(config4D);
 */
 
 let t; // Timer instance
-let animators = []; // Array to store Animator instances
-const easingFunctionNames = Animator.getEasingFunctionNames(); // Array of easing function names
+let easings = []; // Array to store Easing instances
+const easingFunctionNames = Easing.getEasingFunctionNames(); // Array of easing function names
 const numberOfEasingFunctions = easingFunctionNames.length; // Number of easing functions
 
 function setup() {
@@ -52,35 +52,35 @@ function setup() {
 
   console.log(easingFunctionNames);
 
-  // Create Animator instances based on the number of easing functions
+  // Create Easing instances based on the number of easing functions
   for (let i = 0; i < numberOfEasingFunctions; i++) {
-    // Calculate initial Y position for each Animator
+    // Calculate initial Y position for each Easing
     let initialY = map(i, 0, numberOfEasingFunctions - 1, 50, height - 50);
     // Get the current easing function name
     let easingFunctionName = easingFunctionNames[i % numberOfEasingFunctions];
-    // Create an Animator with initial config object
-    let animator = new Animator({
+    // Create an Easing with initial config object
+    let easing = new Easing({
       values: { x: 150, y: initialY },
       endValues: { x: width - 50, y: initialY },
       duration: 1000,
       easingFunctionName: easingFunctionName,
     });
-    animator.start();
-    animators.push(animator); // Add Animator to the array
+    easing.start();
+    easings.push(easing); // Add Easing to the array
   }
 }
 
 function draw() {
   background(0, 50); // Semi-transparent background for trails
 
-  // Update each Animator's state
-  animators.forEach((animator, index) => {
-    animator.update();
+  // Update each Easing's state
+  easings.forEach((easing, index) => {
+    easing.update();
   });
 
-  // Draw each Animator's current position and display easing function name
-  animators.forEach((animator, index) => {
-    let currentPosition = animator.getCurrentValues();
+  // Draw each Easing's current position and display easing function name
+  easings.forEach((easing, index) => {
+    let currentPosition = easing.getCurrentValues();
     fill(255);
     ellipse(currentPosition.x, currentPosition.y, 10, 10);
     let easingFunctionName =
@@ -100,28 +100,28 @@ function keyPressed() {
     }
   }
 
-  // Trigger a single Animator's movement on "t" key press
+  // Trigger a single Easing's movement on "t" key press
   if (key == "t") {
     let newX = random(width);
     let newY = random(height);
     let newDuration = 500;
-    animators[0].duration = newDuration;
-    animators[0].setTargetPosition(newX, newY);
-    animators[0].start();
+    easings[0].duration = newDuration;
+    easings[0].setTargetPosition(newX, newY);
+    easings[0].start();
   }
 
-  // Reset and animate all Animators on "r" key press
+  // Reset and animate all Easings on "r" key press
   if (key == "r") {
-    animators.forEach((animator, index) => {
-      let initialY = map(index, 0, animators.length - 1, 50, height - 50);
-      let startX = animator.getCurrentValues().x;
+    easings.forEach((easing, index) => {
+      let initialY = map(index, 0, easings.length - 1, 50, height - 50);
+      let startX = easing.getCurrentValues().x;
       let targetX = 150;
 
       // Set start and target positions, duration, and start the animation
-      animator.setStartValues({ x: startX, y: initialY });
-      animator.setEndValues({ x: targetX, y: initialY });
-      animator.duration = max(t.remainingTime - 150, 0);
-      animator.start();
+      easing.setStartValues({ x: startX, y: initialY });
+      easing.setEndValues({ x: targetX, y: initialY });
+      easing.duration = max(t.remainingTime - 150, 0);
+      easing.start();
     });
   }
 }
@@ -129,17 +129,16 @@ function keyPressed() {
 // Callback function for the timer tick
 function callback() {
   console.log("tick");
-  animators.forEach((animator, index) => {
-    let initialY = map(index, 0, animators.length - 1, 50, height - 50);
+  easings.forEach((easing, index) => {
+    let initialY = map(index, 0, easings.length - 1, 50, height - 50);
 
-    let startX =
-      animator.getCurrentValues().x === width - 50 ? width - 50 : 150;
-    let targetX = animator.getCurrentValues().x === 150 ? width - 50 : 150;
+    let startX = easing.getCurrentValues().x === width - 50 ? width - 50 : 150;
+    let targetX = easing.getCurrentValues().x === 150 ? width - 50 : 150;
 
     // Set start and target positions, duration, and start the animation
-    animator.setStartValues({ x: startX, y: initialY });
-    animator.setEndValues({ x: targetX, y: initialY });
-    animator.duration = 1500;
-    animator.start();
+    easing.setStartValues({ x: startX, y: initialY });
+    easing.setEndValues({ x: targetX, y: initialY });
+    easing.duration = 1500;
+    easing.start();
   });
 }

@@ -1,10 +1,10 @@
 /**
- * Animator class for handling animations with easing functions.
+ * Easing class for handling animations with easing functions.
  * @class
  */
-class Animator {
+class Easing {
   /**
-   * Constructor for the Animator class.
+   * Constructor for the Easing class.
    * @param {Object} config - Configuration object for the animation.
    * @param {Object} [config.values={x: 0}] - Initial named values for the animation.
    * @param {Object} [config.endValues=config.values] - Target named values for the animation.
@@ -39,8 +39,8 @@ class Animator {
     this.duration = duration;
     this.dimension = valueKeys.length;
     this.easingFunction =
-      Animator.EasingFunctions[easingFunctionName] ||
-      Animator.EasingFunctions.easeInOutSine;
+      Easing.EasingFunctions[easingFunctionName] ||
+      Easing.EasingFunctions.easeInOutSine;
 
     // Set initial and target values
     this.currentValues = { ...values };
@@ -240,7 +240,7 @@ class Animator {
  * @type {Object}
  * @static
  */
-Animator.EasingFunctions = {
+Easing.EasingFunctions = {
   easeLinear(t, b, c, d) {
     return (c * t) / d + b;
   },
@@ -394,6 +394,6 @@ Animator.EasingFunctions = {
  * @static
  * @function
  */
-Animator.getEasingFunctionNames = function () {
-  return Object.keys(Animator.EasingFunctions);
+Easing.getEasingFunctionNames = function () {
+  return Object.keys(Easing.EasingFunctions);
 };

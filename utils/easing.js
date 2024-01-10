@@ -57,7 +57,7 @@ class Easing {
    * @function
    */
   start() {
-    this.startTime = millis();
+    this.startTime = performance.now();
     this._running = true;
   }
 
@@ -77,8 +77,8 @@ class Easing {
     if (!this._running) return;
 
     // Calculate the percentage of completion based on elapsed time
-    let elapsedTime = millis() - this.startTime;
-    let percent = min(elapsedTime / this._duration, 1);
+    let elapsedTime = performance.now() - this.startTime;
+    let percent = Math.min(elapsedTime / this._duration, 1);
 
     // Update each dimension separately
     for (let key of this.valueKeys) {
@@ -195,7 +195,7 @@ class Easing {
    */
   getElapsed() {
     if (this._running) {
-      return millis() - this.startTime;
+      return performance.now() - this.startTime;
     } else {
       return 0;
     }
@@ -208,7 +208,7 @@ class Easing {
    */
   getRemaining() {
     if (this._running) {
-      return max(0, this._duration - (millis() - this.startTime));
+      return Math.max(0, this._duration - (performance.now() - this.startTime));
     } else {
       return 0;
     }
@@ -246,7 +246,7 @@ Easing.EasingFunctions = {
   },
 
   easeInSine(t, b, c, d) {
-    return -c * cos((t / d) * (PI / 2)) + c + b;
+    return -c * Math.cos((t / d) * (Math.PI / 2)) + c + b;
   },
 
   easeInQuad(t, b, c, d) {
@@ -276,13 +276,19 @@ Easing.EasingFunctions = {
       a = c;
       s = p / 4;
     } else {
-      s = (p / (2 * PI)) * Math.asin(c / a);
+      s = (p / (2 * Math.PI)) * Math.asin(c / a);
     }
-    return -(a * pow(2, 10 * (t -= 1)) * sin(((t * d - s) * (2 * PI)) / p)) + b;
+    return (
+      -(
+        a *
+        Math.pow(2, 10 * (t -= 1)) *
+        Math.sin(((t * d - s) * (2 * Math.PI)) / p)
+      ) + b
+    );
   },
 
   easeOutSine(t, b, c, d) {
-    return c * sin((t / d) * (PI / 2)) + b;
+    return c * Math.sin((t / d) * (Math.PI / 2)) + b;
   },
 
   easeOutQuad(t, b, c, d) {
@@ -326,9 +332,13 @@ Easing.EasingFunctions = {
       a = c;
       s = p / 4;
     } else {
-      s = (p / (2 * PI)) * Math.asin(c / a);
+      s = (p / (2 * Math.PI)) * Math.asin(c / a);
     }
-    return a * pow(2, -10 * t) * sin(((t * d - s) * (2 * PI)) / p) + c + b;
+    return (
+      a * Math.pow(2, -10 * t) * Math.sin(((t * d - s) * (2 * Math.PI)) / p) +
+      c +
+      b
+    );
   },
 
   easeInOutQuad(t, b, c, d) {
@@ -339,7 +349,7 @@ Easing.EasingFunctions = {
   },
 
   easeInOutSine(t, b, c, d) {
-    return (-c / 2) * (cos((PI * t) / d) - 1) + b;
+    return (-c / 2) * (Math.cos((Math.PI * t) / d) - 1) + b;
   },
 
   easeInOutCubic(t, b, c, d) {
@@ -372,16 +382,22 @@ Easing.EasingFunctions = {
       a = c;
       s = p / 4;
     } else {
-      s = (p / (2 * PI)) * Math.asin(c / a);
+      s = (p / (2 * Math.PI)) * Math.asin(c / a);
     }
     if (t < 1) {
       return (
-        -0.5 * (a * pow(2, 10 * (t -= 1)) * sin(((t * d - s) * (2 * PI)) / p)) +
+        -0.5 *
+          (a *
+            Math.pow(2, 10 * (t -= 1)) *
+            Math.sin(((t * d - s) * (2 * Math.PI)) / p)) +
         b
       );
     }
     return (
-      a * pow(2, -10 * (t -= 1)) * sin(((t * d - s) * (2 * PI)) / p) * 0.5 +
+      a *
+        Math.pow(2, -10 * (t -= 1)) *
+        Math.sin(((t * d - s) * (2 * Math.PI)) / p) *
+        0.5 +
       c +
       b
     );

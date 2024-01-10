@@ -100,16 +100,6 @@ function keyPressed() {
     }
   }
 
-  // Trigger a single Easing's movement on "t" key press
-  if (key == "t") {
-    let newX = random(width);
-    let newY = random(height);
-    let newDuration = 500;
-    easings[0].duration = newDuration;
-    easings[0].setTargetPosition(newX, newY);
-    easings[0].start();
-  }
-
   // Reset and animate all Easings on "r" key press
   if (key == "r") {
     easings.forEach((easing, index) => {

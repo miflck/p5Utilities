@@ -40,6 +40,31 @@ const animator = new Animator({
 - `duration`: The duration of the animation in milliseconds. In this case, it's set to `2000` milliseconds (or 2 seconds).
 - `easingFunctionName`: The name of the easing function to be used. In this example, it's set to `'easeInOutQuad'`.
 
+### Animating One Dimension (e.g., Length):
+
+To animate just one dimension, you can specify only the relevant property in the values and endValues objects. For example:
+
+```javascript
+const animatorLength = new Animator({
+  values: { length: 0 },
+  endValues: { length: 100 },
+  duration: 1000,
+  easingFunctionName: "easeInOutQuad",
+});
+```
+
+Animating Three Dimensions (e.g., x, y, z):
+Similarly, for three dimensions:
+
+```javascript
+const animatorXYZ = new Animator({
+  values: { x: 0, y: 0, z: 0 },
+  endValues: { x: 100, y: 50, z: 20 },
+  duration: 2000,
+  easingFunctionName: "easeInOutQuad",
+});
+```
+
 Start and stop the animation as needed.
 
 ```javascript

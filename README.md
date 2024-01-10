@@ -33,6 +33,13 @@ const animator = new Animator({
 });
 ```
 
+**Explanation of the Config Object:**
+
+- `values`: An object representing the initial values of the animation. In this example, it sets the initial position to `{ x: 0, y: 100 }`.
+- `endValues`: An object representing the target values of the animation. Here, it sets the target position to `{ x: 300, y: 0 }`.
+- `duration`: The duration of the animation in milliseconds. In this case, it's set to `2000` milliseconds (or 2 seconds).
+- `easingFunctionName`: The name of the easing function to be used. In this example, it's set to `'easeInOutQuad'`.
+
 Start and stop the animation as needed.
 
 ```javascript
@@ -63,6 +70,18 @@ Check if the animation is running:
 ```javascript
 const running = animator.isRunning;
 console.log("Is Running:", running);
+```
+
+Get elapsed and remaining time:
+
+```javascript
+// Get the elapsed time
+const elapsed = animator.getElapsed();
+console.log("Elapsed Time:", elapsed, "ms");
+
+// Get the remaining time
+const remaining = animator.getRemaining();
+console.log("Remaining Time:", remaining, "ms");
 ```
 
 Set new start values:

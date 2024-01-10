@@ -5,37 +5,49 @@
 class Animator {
   /**
    * Constructor for the Animator class.
-   * @param {number} initialX - Initial x-coordinate of the animation.
-   * @param {number} initialY - Initial y-coordinate of the animation.
-   * @param {number} duration - Duration of the animation in milliseconds.
-   * @param {string} easingFunctionName - Name of the easing function to be used.
+   * @param {Object} config - Configuration object for the animation.
+   * @param {Object} [config.values={x: 0}] - Initial named values for the animation.
+   * @param {Object} [config.endValues=config.values] - Target named values for the animation.
+   * @param {number} [config.duration=1000] - Duration of the animation in milliseconds.
+   * @param {string} [config.easingFunctionName='easeInOutSine'] - Name of the easing function to be used.
+   * @throws Will throw an error if the provided values or targetValues are not arrays.
+   * @throws Will throw an error if the dimension of targetValues doesn't match the dimension of values.
    */
-  constructor(initialX, initialY, duration, easingFunctionName) {
-    // Initial position
-    this.x = initialX;
-    this.y = initialY;
+  constructor(config) {
+    // Default values
+    const {
+      values = { x: 0 },
+      endValues = values,
+      duration = 1000,
+      easingFunctionName = "easeInOutSine",
+    } = config;
 
-    // Starting position used for interpolation
-    this.startX = initialX;
-    this.startY = initialY;
+    // Validate values and endValues
+    if (typeof values !== "object" || typeof endValues !== "object") {
+      throw new Error(
+        "Invalid values or targetValues. Please provide objects."
+      );
+    }
 
-    // Duration of the animation
-    this._duration = duration;
+    const valueKeys = Object.keys(values);
+    const endValueKeys = Object.keys(endValues);
 
-    // Timestamp when the animation started
-    this.startTime = 0;
-
-    // Easing function
+    // Initialize properties
+    this.valueKeys = valueKeys;
+    this.values = { ...values };
+    this.endValues = { ...endValues };
+    this.duration = duration;
+    this.dimension = valueKeys.length;
     this.easingFunction =
       Animator.EasingFunctions[easingFunctionName] ||
       Animator.EasingFunctions.easeInOutSine;
 
-    // Target position for the animation
-    this.newX = initialX;
-    this.newY = initialY;
+    // Set initial and target values
+    this.currentValues = { ...values };
 
-    // Flag indicating if the animation is running
+    // Animation state
     this._running = false;
+    this.startTime = 0;
   }
 
   /* ---- ANIMATION CONTROL ---- */
@@ -68,62 +80,92 @@ class Animator {
     let elapsedTime = millis() - this.startTime;
     let percent = min(elapsedTime / this._duration, 1);
 
-    // Use the easing function to calculate the current position
-    this.x = this.easingFunction(
-      percent,
-      this.startX,
-      this.newX - this.startX,
-      1
-    );
-    this.y = this.easingFunction(
-      percent,
-      this.startY,
-      this.newY - this.startY,
-      1
-    );
+    // Update each dimension separately
+    for (let key of this.valueKeys) {
+      this.currentValues[key] = this.easingFunction(
+        percent,
+        this.values[key],
+        this.endValues[key] - this.values[key],
+        1
+      );
+    }
 
     // Stop the animation after reaching the final position
     if (percent === 1) {
       this._running = false;
-      this.startX = this.x;
-      this.startY = this.y;
+      this.values = { ...this.currentValues };
     }
   }
 
   /* ---- POSITION MANAGEMENT ---- */
 
   /**
-   * Gets the current position of the animation.
-   * @returns {Object} - Object with x and y properties representing the current position.
+   * Gets the current values of the animation.
+   * @returns {Object} - Current values of the animation.
+   * @function
    */
-  getCurrentPosition() {
-    return { x: this.x, y: this.y };
+  getCurrentValues() {
+    return { ...this.currentValues };
   }
 
   /**
-   * Sets the start position of the animation.
-   * @param {number} newX - New x-coordinate for the start position.
-   * @param {number} newY - New y-coordinate for the start position.
+   * Gets the start values of the animation.
+   * @returns {number[]} - start values of the animation.
    * @function
    */
-  setStartPosition(newX, newY) {
-    this.x = newX;
-    this.startX = newX;
-    this.y = newY;
-    this.startY = newY;
+  getValues() {
+    return { ...this.values };
   }
 
   /**
-   * Sets the target position for the animation.
-   * @param {number} newX - New x-coordinate for the target position.
-   * @param {number} newY - New y-coordinate for the target position.
+   * Gets the end values of the animation.
+   * @returns {Object} - End values of the animation.
    * @function
    */
-  setTargetPosition(newX, newY) {
-    this.newX = newX;
-    this.newY = newY;
+  getEndValues() {
+    return { ...this.endValues };
   }
 
+  /**
+   * Sets the start values for the animation.
+   * @param {Object} newValues - New start values for the animation.
+   * @throws Will throw an error if the keys of newValues do not match the original keys.
+   * @function
+   */
+  setStartValues(newValues) {
+    const newKeys = Object.keys(newValues);
+
+    // Check if the keys of newValues match the original keys
+    if (Object.keys(newValues).length !== this.dimension) {
+      throw new Error("Invalid start values dimension.");
+    }
+
+    // Set the new values
+    this.values = { ...newValues };
+
+    // Update the current values to match the new values
+    this.currentValues = { ...newValues };
+
+    // Update the dimension
+    this.dimension = newKeys.length;
+  }
+  /**
+   * Sets the target values for the animation.
+   * @param {Object} newValues - New target values for the animation.
+   * @throws Will throw an error if the keys of newValues do not match the original keys.
+   * @function
+   */
+  setEndValues(newValues) {
+    const newKeys = Object.keys(newValues);
+
+    // Check if the keys of newValues match the original keys
+    if (Object.keys(newValues).length !== this.dimension) {
+      throw new Error("Invalid start values dimension.");
+    }
+
+    // Set the new values
+    this.endValues = { ...newValues };
+  }
   /* ---- DURATION MANAGEMENT ---- */
 
   /**

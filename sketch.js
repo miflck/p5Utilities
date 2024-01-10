@@ -1,3 +1,42 @@
+/*
+
+How to use it
+
+// Example 1D animation with default values
+const animator1D = new Animator({
+  values: [50],
+  duration: 1000,
+  easingFunctionName: "easeInOutSine",
+});
+
+// Example 2D animation with specified values and targetValues
+const animator2D = new Animator({
+  values: [50, 100],
+  targetValues: [200, 300],
+  duration: 1500,
+  easingFunctionName: "easeInOutQuad",
+});
+
+// Example 3D animation
+const animator3D = new Animator({
+  values: [50, 100, 150],
+  targetValues: [200, 300, 250],
+  duration: 2000,
+  easingFunctionName: "easeInOutCubic",
+});
+
+// Configuration object for a 4D animation
+const config4D = {
+  values: [50, 100, 150, 200],
+  targetValues: [200, 300, 250, 150],
+  duration: 2500,
+  easingFunctionName: 'easeInOutQuartic',
+};
+
+// Initialize the Animator with the config object
+const animator4D = new Animator(config4D);
+*/
+
 let t; // Timer instance
 let animators = []; // Array to store Animator instances
 const easingFunctionNames = Animator.getEasingFunctionNames(); // Array of easing function names
@@ -19,8 +58,14 @@ function setup() {
     let initialY = map(i, 0, numberOfEasingFunctions - 1, 50, height - 50);
     // Get the current easing function name
     let easingFunctionName = easingFunctionNames[i % numberOfEasingFunctions];
-    // Create an Animator with initial parameters
-    let animator = new Animator(150, initialY, 1000, easingFunctionName);
+    // Create an Animator with initial config object
+    let animator = new Animator({
+      values: { x: 150, y: initialY },
+      endValues: { x: width - 50, y: initialY },
+      duration: 1000,
+      easingFunctionName: easingFunctionName,
+    });
+    animator.start();
     animators.push(animator); // Add Animator to the array
   }
 }
@@ -35,7 +80,7 @@ function draw() {
 
   // Draw each Animator's current position and display easing function name
   animators.forEach((animator, index) => {
-    let currentPosition = animator.getCurrentPosition();
+    let currentPosition = animator.getCurrentValues();
     fill(255);
     ellipse(currentPosition.x, currentPosition.y, 10, 10);
     let easingFunctionName =
@@ -69,14 +114,13 @@ function keyPressed() {
   if (key == "r") {
     animators.forEach((animator, index) => {
       let initialY = map(index, 0, animators.length - 1, 50, height - 50);
-      let startX = animator.getCurrentPosition().x;
+      let startX = animator.getCurrentValues().x;
       let targetX = 150;
 
       // Set start and target positions, duration, and start the animation
-      animator.setStartPosition(startX, initialY);
-      animator.setTargetPosition(targetX, initialY);
+      animator.setStartValues({ x: startX, y: initialY });
+      animator.setEndValues({ x: targetX, y: initialY });
       animator.duration = max(t.remainingTime - 150, 0);
-
       animator.start();
     });
   }
@@ -87,13 +131,14 @@ function callback() {
   console.log("tick");
   animators.forEach((animator, index) => {
     let initialY = map(index, 0, animators.length - 1, 50, height - 50);
+
     let startX =
-      animator.getCurrentPosition().x === width - 50 ? width - 50 : 150;
-    let targetX = animator.getCurrentPosition().x === 150 ? width - 50 : 150;
+      animator.getCurrentValues().x === width - 50 ? width - 50 : 150;
+    let targetX = animator.getCurrentValues().x === 150 ? width - 50 : 150;
 
     // Set start and target positions, duration, and start the animation
-    animator.setStartPosition(startX, initialY);
-    animator.setTargetPosition(targetX, initialY);
+    animator.setStartValues({ x: startX, y: initialY });
+    animator.setEndValues({ x: targetX, y: initialY });
     animator.duration = 1500;
     animator.start();
   });

@@ -35,25 +35,40 @@ const animator = new Animator({
 
 **Explanation of the Config Object:**
 
-- `values`: An object representing the initial values of the animation. In this example, it sets the initial position to `{ x: 0, y: 100 }`.
-- `endValues`: An object representing the target values of the animation. Here, it sets the target position to `{ x: 300, y: 0 }`.
+- `values`: An object representing the initial values of the animation. you could do n dimensions. In this example, we do two dimentions. the objec sets the initial position to `{ x: 0, y: 100 }`.
+- `endValues`: An object representing the target values of the animation. Here, it sets the target position to `{ x: 300, y: 0 }`. this object has to have the same keys as the values object
 - `duration`: The duration of the animation in milliseconds. In this case, it's set to `2000` milliseconds (or 2 seconds).
 - `easingFunctionName`: The name of the easing function to be used. In this example, it's set to `'easeInOutQuad'`.
 
-### Animating One Dimension (e.g., Length):
+**Easing Functions**
+The Animator class comes with various easing functions. You can explore and choose the one that fits your animation style. Here are some examples:
 
+- easeInOutQuad
+- easeInOutSine
+- easeInOutCubic
+  For a full list of available easing functions, check the **Animator.getEasingFunctionNames()** method. Its static, you dont need to have an instance to get all easing functions
+
+```javascript
+// Get an array of all available easing function names
+const allEasingFunctions = Animator.getEasingFunctionNames();
+
+// Log the array of easing function names
+console.log(allEasingFunctions);
+```
+
+**Animating One Dimension like size:**
 To animate just one dimension, you can specify only the relevant property in the values and endValues objects. For example:
 
 ```javascript
 const animatorLength = new Animator({
-  values: { length: 0 },
-  endValues: { length: 100 },
+  values: { size: 0 },
+  endValues: { size: 100 },
   duration: 1000,
   easingFunctionName: "easeInOutQuad",
 });
 ```
 
-Animating Three Dimensions (e.g., x, y, z):
+**Animating Three Dimensions x, y, z:**
 Similarly, for three dimensions:
 
 ```javascript

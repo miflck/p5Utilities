@@ -203,52 +203,19 @@ Animator.EasingFunctions = {
     return (c * t) / d + b;
   },
 
-  easeInQuad(t, b, c, d) {
-    t /= d;
-    return c * t * t + b;
-  },
-
-  easeOutQuad(t, b, c, d) {
-    t /= d;
-    return -c * t * (t - 2) + b;
-  },
-
-  easeInOutQuad(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t + b;
-    t--;
-    return (-c / 2) * (t * (t - 2) - 1) + b;
-  },
-
   easeInSine(t, b, c, d) {
     return -c * cos((t / d) * (PI / 2)) + c + b;
   },
 
-  easeOutSine(t, b, c, d) {
-    return c * sin((t / d) * (PI / 2)) + b;
-  },
-
-  easeInOutSine(t, b, c, d) {
-    return (-c / 2) * (cos((PI * t) / d) - 1) + b;
+  easeInQuad(t, b, c, d) {
+    t /= d;
+    return c * t * t + b;
   },
 
   easeInCubic(t, b, c, d) {
     t /= d;
     return c * t * t * t + b;
   },
-  easeOutCubic(t, b, c, d) {
-    t /= d;
-    t--;
-    return c * (t * t * t + 1) + b;
-  },
-
-  easeInOutCubic(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t * t + b;
-    t -= 2;
-    return (c / 2) * (t * t * t + 2) + b;
-  },
-
   easeInQuartic(t, b, c, d) {
     t /= d;
     return c * t * t * t * t + b;
@@ -257,39 +224,7 @@ Animator.EasingFunctions = {
     t /= d;
     return c * t * t * t * t * t + b;
   },
-  easeOutQuartic(t, b, c, d) {
-    t /= d;
-    t--;
-    return -c * (t * t * t * t - 1) + b;
-  },
-  easeInOutQuartic(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t * t * t + b;
-    t -= 2;
-    return (-c / 2) * (t * t * t * t - 2) + b;
-  },
-  easeOutQuintic(t, b, c, d) {
-    t /= d;
-    t--;
-    return c * (t * t * t * t * t + 1) + b;
-  },
-  easeInOutQuintic(t, b, c, d) {
-    t /= d / 2;
-    if (t < 1) return (c / 2) * t * t * t * t * t + b;
-    t -= 2;
-    return (c / 2) * (t * t * t * t * t + 2) + b;
-  },
-  easeOutBounce(t, b, c, d) {
-    if ((t /= d) < 1 / 2.75) {
-      return c * (7.5625 * t * t) + b;
-    } else if (t < 2 / 2.75) {
-      return c * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + b;
-    } else if (t < 2.5 / 2.75) {
-      return c * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + b;
-    } else {
-      return c * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + b;
-    }
-  },
+
   easeInElastic(t, b, c, d, a, p) {
     if (t === 0) return b;
     if ((t /= d) === 1) return b + c;
@@ -304,6 +239,42 @@ Animator.EasingFunctions = {
     return -(a * pow(2, 10 * (t -= 1)) * sin(((t * d - s) * (2 * PI)) / p)) + b;
   },
 
+  easeOutSine(t, b, c, d) {
+    return c * sin((t / d) * (PI / 2)) + b;
+  },
+
+  easeOutQuad(t, b, c, d) {
+    t /= d;
+    return -c * t * (t - 2) + b;
+  },
+  easeOutCubic(t, b, c, d) {
+    t /= d;
+    t--;
+    return c * (t * t * t + 1) + b;
+  },
+  easeOutQuartic(t, b, c, d) {
+    t /= d;
+    t--;
+    return -c * (t * t * t * t - 1) + b;
+  },
+  easeOutQuintic(t, b, c, d) {
+    t /= d;
+    t--;
+    return c * (t * t * t * t * t + 1) + b;
+  },
+
+  easeOutBounce(t, b, c, d) {
+    if ((t /= d) < 1 / 2.75) {
+      return c * (7.5625 * t * t) + b;
+    } else if (t < 2 / 2.75) {
+      return c * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75) + b;
+    } else if (t < 2.5 / 2.75) {
+      return c * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375) + b;
+    } else {
+      return c * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375) + b;
+    }
+  },
+
   easeOutElastic(t, b, c, d, a, p) {
     if (t === 0) return b;
     if ((t /= d) === 1) return b + c;
@@ -316,6 +287,38 @@ Animator.EasingFunctions = {
       s = (p / (2 * PI)) * Math.asin(c / a);
     }
     return a * pow(2, -10 * t) * sin(((t * d - s) * (2 * PI)) / p) + c + b;
+  },
+
+  easeInOutQuad(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) return (c / 2) * t * t + b;
+    t--;
+    return (-c / 2) * (t * (t - 2) - 1) + b;
+  },
+
+  easeInOutSine(t, b, c, d) {
+    return (-c / 2) * (cos((PI * t) / d) - 1) + b;
+  },
+
+  easeInOutCubic(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) return (c / 2) * t * t * t + b;
+    t -= 2;
+    return (c / 2) * (t * t * t + 2) + b;
+  },
+
+  easeInOutQuartic(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) return (c / 2) * t * t * t * t + b;
+    t -= 2;
+    return (-c / 2) * (t * t * t * t - 2) + b;
+  },
+
+  easeInOutQuintic(t, b, c, d) {
+    t /= d / 2;
+    if (t < 1) return (c / 2) * t * t * t * t * t + b;
+    t -= 2;
+    return (c / 2) * (t * t * t * t * t + 2) + b;
   },
 
   easeInOutElastic(t, b, c, d, a, p) {
